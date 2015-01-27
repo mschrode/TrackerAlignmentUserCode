@@ -105,7 +105,7 @@ process.refittedOfflinePrimaryVertices = process.offlinePrimaryVertices.clone(
 
 
 ## --- Vertex analysis -------------------------------------------------
-from Alignment.VertexAnalysis.vertexanalysis_cfi import vertexanalysis
+from TrackerAlignmentUserCode.VertexAnalysis.vertexanalysis_cfi import vertexanalysis
 process.VertexAnalysis = vertexanalysis.clone(
     TreeName         = cms.string("VertexAnalysis"),
     MaxNTracks       = cms.int32(200),

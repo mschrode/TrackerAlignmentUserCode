@@ -48,7 +48,7 @@
 #include "RecoVertex/VertexPrimitives/interface/TransientVertex.h"
 #include "RecoVertex/AdaptiveVertexFit/interface/AdaptiveVertexFitter.h"
 
-#include "Alignment/VertexAnalysis/interface/VertexAnalysis.h"
+#include "TrackerAlignmentUserCode/VertexAnalysis/interface/VertexAnalysis.h"
 
 #include "TTree.h"
 
