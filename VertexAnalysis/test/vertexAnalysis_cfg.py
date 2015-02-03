@@ -16,7 +16,7 @@ process.options = cms.untracked.PSet(
 
 
 ## --- Conditions ------------------------------------------------------
-process.load("CondCore.DBCommon.CondDBSetup_cfi")
+from CondCore.DBCommon.CondDBSetup_cfi import *
 process.load('Configuration/StandardSequences/MagneticField_AutoFromDBCurrent_cff')
 process.load("Configuration.Geometry.GeometryIdeal_cff")
 process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
@@ -24,6 +24,20 @@ process.GlobalTag.globaltag = cms.string("FT53_V21A_AN6::All")
 #process.GlobalTag.globaltag = cms.string("FT_R_53_V18::All")
 #process.GlobalTag.globaltag = cms.string("START53_V23::All")
 #process.GlobalTag.globaltag = cms.string("DESIGN53_V18::All")
+
+# load mis-aligned geometry on top of GT geometry
+#import CalibTracker.Configuration.Common.PoolDBESSource_cfi
+#process.customTrackerAlignment = CalibTracker.Configuration.Common.PoolDBESSource_cfi.poolDBESSource.clone(
+#    connect = cms.string("sqlite_file:/afs/desy.de/user/m/matsch/CMSSW_5_3_23_patch1/src/TrackerAlignmentUserCode/VertexAnalysis/data/test_MisalignmentScenario1_fromSTART53_V24_fromRandomTool.db"),
+#    toGet = cms.VPSet(
+#        cms.PSet(
+#            record = cms.string('TrackerAlignmentRcd'),
+#            tag = cms.string('Alignments')
+#        )
+#    )
+#)
+#process.es_prefer_trackerAlignment = cms.ESPrefer("PoolDBESSource","customTrackerAlignment")
+
 
 
 
@@ -51,26 +65,6 @@ process.source = cms.Source(
         '/store/data/Run2012C/LP_MinBias1/RECO/22Jan2013-v1/10000/0EECF9FE-BF8B-E211-B239-90B11C186D00.root',
         '/store/data/Run2012C/LP_MinBias1/RECO/22Jan2013-v1/10000/1053A00D-2F8B-E211-9EE5-80000048FE80.root',
         '/store/data/Run2012C/LP_MinBias1/RECO/22Jan2013-v1/10000/105B85F3-BF8B-E211-A758-90B11C1862C2.root',
-
-
-        #'/store/data/Run2012A/MET/RECO/22Jan2013-v1/20000/001C3948-A682-E211-A511-00304867906C.root',
-        #'/store/data/Run2012A/MET/RECO/22Jan2013-v1/20000/003DD113-8682-E211-98AE-0025905938B4.root',
-        #'/store/data/Run2012A/MET/RECO/22Jan2013-v1/20000/0094BB86-A982-E211-B52A-00261894395A.root',
-        #'/store/data/Run2012A/MET/RECO/22Jan2013-v1/20000/00AD589F-9E82-E211-94D4-003048FFD730.root',
-        #'/store/data/Run2012A/MET/RECO/22Jan2013-v1/20000/00BAB721-B082-E211-8768-0026189438B3.root',
-        #'/store/data/Run2012A/MET/RECO/22Jan2013-v1/20000/00DC9D73-A682-E211-AE61-002618943910.root',
-        #'/store/data/Run2012A/MET/RECO/22Jan2013-v1/20000/02119125-A282-E211-B952-00248C65A3EC.root',
-        #'/store/data/Run2012A/MET/RECO/22Jan2013-v1/20000/047AD091-A982-E211-945E-0030486790B8.root',
-        #'/store/data/Run2012A/MET/RECO/22Jan2013-v1/20000/04BB0994-9682-E211-9CCF-00261894390A.root',
-        #'/store/data/Run2012A/MET/RECO/22Jan2013-v1/20000/04C897C5-B082-E211-A438-002590596490.root',
-        #'/store/data/Run2012A/MET/RECO/22Jan2013-v1/20000/04DE01DA-AD82-E211-9242-002618943857.root',
-        #'/store/data/Run2012A/MET/RECO/22Jan2013-v1/20000/060C8DDD-AD82-E211-A5C6-003048F9EB46.root',
-        #'/store/data/Run2012A/MET/RECO/22Jan2013-v1/20000/062D5493-9C82-E211-A378-002618943935.root',
-        #'/store/data/Run2012A/MET/RECO/22Jan2013-v1/20000/0652F652-AC82-E211-8414-0025905964C0.root',
-        #'/store/data/Run2012A/MET/RECO/22Jan2013-v1/20000/06C3158F-AD82-E211-B275-002590596498.root',
-        #'/store/data/Run2012A/MET/RECO/22Jan2013-v1/20000/0825FADE-9282-E211-98D2-003048678AE2.root',
-        #'/store/data/Run2012A/MET/RECO/22Jan2013-v1/20000/083EA0EA-B382-E211-B591-002354EF3BE2.root',
-        #'/store/data/Run2012A/MET/RECO/22Jan2013-v1/20000/086CC53E-9E82-E211-8CFC-00261894397F.root',
     )
 )
 process.maxEvents = cms.untracked.PSet(
@@ -109,11 +103,11 @@ from TrackerAlignmentUserCode.VertexAnalysis.vertexanalysis_cfi import vertexana
 process.VertexAnalysis = vertexanalysis.clone(
     TreeName         = cms.string("VertexAnalysis"),
     MaxNTracks       = cms.int32(200),
-    #TrackCollection  = cms.InputTag("refittedTracks"),
-    TrackCollection  = cms.InputTag("generalTracks"),
+    TrackCollection  = cms.InputTag("refittedTracks"),
+    #TrackCollection  = cms.InputTag("generalTracks"),
     MaxNVertices     = cms.int32(50),
-    #VertexCollection = cms.InputTag("refittedOfflinePrimaryVertices"),
-    VertexCollection = cms.InputTag("offlinePrimaryVertices"),
+    VertexCollection = cms.InputTag("refittedOfflinePrimaryVertices"),
+    #VertexCollection = cms.InputTag("offlinePrimaryVertices"),
     GenParticlesCollection = cms.InputTag("genParticles"),
 )
 
@@ -122,8 +116,8 @@ process.VertexAnalysis = vertexanalysis.clone(
 
 process.dump = cms.EDAnalyzer("EventContentAnalyzer")
 process.p = cms.Path(
-#    process.refittedTracks *
-#    process.refittedOfflinePrimaryVertices *
+    process.refittedTracks *
+    process.refittedOfflinePrimaryVertices *
 #    process.dump *
     process.VertexAnalysis 
 )
