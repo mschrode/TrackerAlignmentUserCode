@@ -15,7 +15,7 @@ options.register('myGT',
                  "Global Tag to use (START53_V24::All is default)")
 
 options.register('myScenario',
-                 "MisalignmentScenario1", # default value
+                 "MisalignmentScenario100Mu", # default value
                  VarParsing.VarParsing.multiplicity.singleton, # singleton or list
                  VarParsing.VarParsing.varType.string, # string, int, or float
                  "scenario to apply")
@@ -108,7 +108,7 @@ process.source = cms.Source("EmptySource",
                             #firstRun = cms.untracked.uint32(210659) # choose your run (for data only!)
                             )
 
-outputfilename = "test_"+str(scenariolabel)+"_from"+process.GlobalTag.globaltag._value.replace('::All','')+"_fromRandomTool.db"
+outputfilename = "geometry_"+str(scenariolabel)+"_from"+process.GlobalTag.globaltag._value.replace('::All','')+"_fromRandomTool.db"
 
 process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(1) )
 
