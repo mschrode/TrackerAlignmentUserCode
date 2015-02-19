@@ -22,6 +22,20 @@ process.load("Configuration.Geometry.GeometryIdeal_cff")
 process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
 process.GlobalTag.globaltag = cms.string("FT53_V21A_AN6::All")
 
+# load mis-aligned geometry on top of GT geometry
+#import CalibTracker.Configuration.Common.PoolDBESSource_cfi
+#process.customTrackerAlignment = CalibTracker.Configuration.Common.PoolDBESSource_cfi.poolDBESSource.clone(
+#    connect = cms.string("sqlite_file:/afs/desy.de/user/m/matsch/CMSSW_5_3_23_patch1/src/TrackerAlignmentUserCode/VertexAnalysis/data/geometry_MisalignmentScenario100Mu_fromFT53_V21A_AN6_fromRandomTool.db"),
+#    toGet = cms.VPSet(
+#        cms.PSet(
+#            record = cms.string('TrackerAlignmentRcd'),
+#            tag = cms.string('Alignments')
+#        )
+#    )
+#)
+#process.es_prefer_trackerAlignment = cms.ESPrefer("PoolDBESSource","customTrackerAlignment")
+
+
 
 
 ## --- Input file ------------------------------------------------------
@@ -66,20 +80,39 @@ process.TFileService = cms.Service(
 )
 
 
+## --- Tracks and PV re-fitting ----------------------------------------
+
+#process.load("RecoVertex.BeamSpotProducer.BeamSpot_cfi")
+process.load("RecoTracker.TrackProducer.TrackRefitters_cff")
+process.refittedTracks = process.TrackRefitter.clone(
+    src ="generalTracks",
+)
+
+process.load("RecoVertex.PrimaryVertexProducer.OfflinePrimaryVertices_cfi")
+process.load("TrackingTools.TransientTrack.TransientTrackBuilder_cfi")
+process.refittedOfflinePrimaryVertices = process.offlinePrimaryVertices.clone(
+    TrackLabel = cms.InputTag("refittedTracks")
+)
+
+
 ## --- Vertex analysis -------------------------------------------------
 from TrackerAlignmentUserCode.VertexAnalysis.vertexanalysis_cfi import vertexanalysis
 process.VertexAnalysis = vertexanalysis.clone(
     TreeName         = cms.string("VertexAnalysis"),
     MaxNTracks       = cms.int32(200),
-    TrackCollection  = cms.InputTag("generalTracks"),
+    TrackCollection  = cms.InputTag("refittedTracks"),
     MaxNVertices     = cms.int32(50),
-    VertexCollection = cms.InputTag("offlinePrimaryVertices"),
+    VertexCollection = cms.InputTag("refittedOfflinePrimaryVertices"),
     GenParticlesCollection = cms.InputTag("genParticles"),
 )
 
 
 ## --- Run the anlaysis ------------------------------------------------
 
+process.dump = cms.EDAnalyzer("EventContentAnalyzer")
 process.p = cms.Path(
+    process.refittedTracks *
+    process.refittedOfflinePrimaryVertices *
+#    process.dump *
     process.VertexAnalysis 
 )
