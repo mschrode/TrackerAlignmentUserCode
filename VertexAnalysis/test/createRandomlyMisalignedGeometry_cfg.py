@@ -53,6 +53,7 @@ print "Using global tag: %s" % process.GlobalTag.globaltag._value
 process.load("Alignment.CommonAlignmentProducer.AlignmentProducer_cff")
 process.AlignmentProducer.doMisalignmentScenario=True
 process.AlignmentProducer.applyDbAlignment=True
+process.AlignmentProducer.checkDbAlignmentValidity=False #otherwise error thrown for IOV dependent GTs
 from TrackerAlignmentUserCode.VertexAnalysis.MisalignmentScenarios_cff import *
 
 isMatched = False
