@@ -33,7 +33,7 @@ process.GlobalTag.globaltag = cms.string("FT53_V21A_AN6::All")
 #        )
 #    )
 #)
-process.es_prefer_trackerAlignment = cms.ESPrefer("PoolDBESSource","customTrackerAlignment")
+#process.es_prefer_trackerAlignment = cms.ESPrefer("PoolDBESSource","customTrackerAlignment")
 
 
 
@@ -42,8 +42,9 @@ process.es_prefer_trackerAlignment = cms.ESPrefer("PoolDBESSource","customTracke
 process.source = cms.Source(
     "PoolSource",
     fileNames = cms.untracked.vstring(
-        '/store/data/Run2012A/SingleMu/ALCARECO/TkAlMuonIsolated-22Jan2013-v1/20000/02B803D1-B770-E211-8287-00266CFFC940.root',
-        '/store/data/Run2012A/SingleMu/ALCARECO/TkAlMuonIsolated-22Jan2013-v1/20000/08039FC6-6C70-E211-897C-1CC1DE1CEDB2.root'
+        '/store/data/Run2012A/DoubleMu/ALCARECO/TkAlZMuMu-22Jan2013-v1/20000/1A36594C-5D82-E211-AE12-003048678B84.root',
+        '/store/data/Run2012A/DoubleMu/ALCARECO/TkAlZMuMu-22Jan2013-v1/20000/70335383-0583-E211-9F9A-003048FFCB74.root',
+        '/store/data/Run2012A/DoubleMu/ALCARECO/TkAlZMuMu-22Jan2013-v1/20000/92274C2A-6982-E211-BCB2-003048678B06.root'
     )
 )
 process.maxEvents = cms.untracked.PSet(
@@ -63,11 +64,10 @@ process.TFileService = cms.Service(
 
 
 ## --- Tracks and PV re-fitting ----------------------------------------
-
 process.load("RecoVertex.BeamSpotProducer.BeamSpot_cfi")
 process.load("RecoTracker.TrackProducer.TrackRefitters_cff")
 process.refittedTracks = process.TrackRefitter.clone(
-    src ="ALCARECOTkAlMuonIsolated",
+    src ="ALCARECOTkAlZMuMu",
 )
 
 process.load("RecoVertex.PrimaryVertexProducer.OfflinePrimaryVertices_cfi")
