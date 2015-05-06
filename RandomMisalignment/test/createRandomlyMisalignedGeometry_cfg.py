@@ -125,14 +125,16 @@ process.PoolDBOutputService = cms.Service("PoolDBOutputService",
     # connect = cms.string('oracle://cms_orcoff_prep/CMS_COND_ALIGNMENT'),  # preparation/develop. DB
     timetype = cms.untracked.string('runnumber'),
     connect = cms.string('sqlite_file:'+outputfilename),                                      
-    toPut = cms.VPSet(cms.PSet(
-        record = cms.string('TrackerAlignmentRcd'),
-        tag = cms.string('Alignments')
-    ), 
+    toPut = cms.VPSet(
         cms.PSet(
-            record = cms.string('TrackerAlignmentErrorRcd'),
-            tag = cms.string('AlignmentErrors')
-        ))
+            record = cms.string('TrackerAlignmentRcd'),
+            tag = cms.string('Alignments')
+        ), 
+       cms.PSet(
+           record = cms.string('TrackerAlignmentErrorRcd'),
+           tag = cms.string('AlignmentErrors')
+       )
+    )
 )
 process.PoolDBOutputService.DBParameters.messageLevel = 2
 
