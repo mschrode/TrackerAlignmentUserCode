@@ -54,7 +54,7 @@ process.load("Alignment.CommonAlignmentProducer.AlignmentProducer_cff")
 process.AlignmentProducer.doMisalignmentScenario=True
 process.AlignmentProducer.applyDbAlignment=True
 process.AlignmentProducer.checkDbAlignmentValidity=False #otherwise error thrown for IOV dependent GTs
-from TrackerAlignmentUserCode.VertexAnalysis.MisalignmentScenarios_cff import *
+from TrackerAlignmentUserCode.RandomMisalignment.MisalignmentScenarios_cff import *
 
 isMatched = False
 print "Using scenario:",options.myScenario
